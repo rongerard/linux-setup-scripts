@@ -191,6 +191,11 @@ chmod +x install.sh
 
 Run it:
 
+sudo ./install.sh
+
+or
+if it need admin
+
 ./install.sh
 
 ---
