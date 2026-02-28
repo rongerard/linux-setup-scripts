@@ -218,4 +218,4 @@ Restart SSH:
 
 sudo systemctl restart ssh
 
-Now only SSH keys can login 🔥
+Now only SSH keys can login
