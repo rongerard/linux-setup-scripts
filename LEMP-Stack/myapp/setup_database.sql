@@ -8,12 +8,11 @@ CREATE DATABASE IF NOT EXISTS my_database
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
--- Create the user (works on both localhost and remote also any host)
-CREATE USER IF NOT EXISTS 'my_user' IDENTIFIED BY 'my_password';
-
+-- Create the user (connect it to db_connect)
+CREATE USER IF NOT EXISTS 'my_user'@'localhost' IDENTIFIED BY 'my_password';
 
 -- Grant all privileges on my_database to my_user
-GRANT ALL PRIVILEGES ON my_database.* TO 'my_user';
+GRANT ALL PRIVILEGES ON my_database.* TO 'my_user'@'localhost';
 
 -- Apply privilege changes immediately
 FLUSH PRIVILEGES;
