@@ -86,48 +86,71 @@ ufw status
 
 ---
 
-# ✅ STEP 6 — Generate SSH Key (On Your Local Windows PC)
+# ✅ STEP 6 — Generate an SSH Key (On Your Local Windows PC)
 
-Now go to your **Windows computer**, open **PowerShell**:
+On your Windows computer, open PowerShell:
 
 ssh-keygen
 
-Just press Enter for:
+Press Enter to accept the default values:
 
-- file location
-- passphrase (optional)
+File location
+Passphrase (optional)
 
 This creates:
 
-C:\Users\YourName\.ssh\id_ed25519  
+C:\Users\YourName\.ssh\id_ed25519
 C:\Users\YourName\.ssh\id_ed25519.pub
+
+To display your public key, run:
+
+type $env:USERPROFILE\.ssh\id_ed25519.pub
+
+Leave this window open or copy the output—you'll use it in the next step.
 
 ---
 
-# ✅ STEP 7 — Copy Public Key to Debian User
+# ✅ STEP 7 — Log in Using Your Password and Install Your Public Key
 
-On Debian (as root):
+From Windows PowerShell, connect to your Debian server using your newly created user:
 
-mkdir -p /home/myuser/.ssh  
-nano /home/myuser/.ssh/authorized_keys
+ssh myuser@SERVER_IP
 
-Now:
+Example:
 
-1. On Windows PowerShell:
+ssh myuser@192.168.1.10
 
-type this on windows powershell exactly as it is
+The first time you connect, you'll see a message similar to:
+
+The authenticity of host 'SERVER_IP' can't be established.
+
+Type:
+
+yes
+
+When prompted, enter the password you created for myuser.
+
+After logging in successfully:
+
+1. Create the .ssh directory
+mkdir -p ~/.ssh
+2. Create (or edit) the authorized_keys file
+nano ~/.ssh/authorized_keys
+3. Paste your public key
+
+Return to your Windows PowerShell, copy the output of:
 
 type $env:USERPROFILE\.ssh\id_ed25519.pub
-2. Login to through ssh myuser@(host address)
-3. Copy the long output
-4. Paste it inside Debian `authorized_keys`
-5. Save and exit
 
-Fix permissions:
+Paste the entire key into authorized_keys.
 
-chown -R myuser:myuser /home/myuser/.ssh  
-chmod 700 /home/myuser/.ssh  
-chmod 600 /home/myuser/.ssh/authorized_keys
+Save and exit:
+
+Ctrl + O, Enter
+Ctrl + X
+4. Set the correct permissions
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
 
 ---
 
