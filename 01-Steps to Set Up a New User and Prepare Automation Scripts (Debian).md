@@ -53,15 +53,15 @@ myuser : myuser sudo
 
 # ✅ STEP 5 — Install OpenSSH & UFW (Firewall)
 
-# 1. Update and Install
+ 1. Update and Install
 
 apt update && apt install openssh-server ufw -y
 
-# 2. Ensure SSH is active
+ 2. Ensure SSH is active
 
 systemctl enable --now ssh
 
-# 3. Configure Firewall Rules
+ 3. Configure Firewall Rules
 
 # We allow SSH first so we don't lock ourselves out!
 
@@ -73,13 +73,13 @@ ufw allow openssh
 
 Also allow the services that will be used. For example, if you're hosting a web server, allow HTTP (port 80) and HTTPS (port 443) through the firewall before enabling it.
 
-# 4. Enable the firewall
+ 4. Enable the firewall
 
-# (--force skips the confirmation prompt)
+ (--force skips the confirmation prompt)
 
 ufw --force enable
 
-# 5. Verification
+ 5. Verification
 
 
 ufw status
@@ -89,51 +89,51 @@ ufw status
 # ✅ STEP 6 — Generate an SSH Key (On Your Local/Client Windows PC)
 
 
-# 1. Generate a new SSH key pair (ed25519 is modern and secure)
+ 1. Generate a new SSH key pair (ed25519 is modern and secure)
 ssh-keygen
 
-# Press Enter to accept the defaults:
-# - File location
-# - Passphrase (optional)
+ Press Enter to accept the defaults:
+ - File location
+ - Passphrase (optional)
 
-# This creates two files:
-# C:\Users\YourName\.ssh\id_ed25519       <- private key, never share this
-# C:\Users\YourName\.ssh\id_ed25519.pub   <- public key, safe to share
+ This creates two files:
+ C:\Users\YourName\.ssh\id_ed25519       <- private key, never share this
+ C:\Users\YourName\.ssh\id_ed25519.pub   <- public key, safe to share
 
-# 2. Display your public key so you can copy it
+ 2. Display your public key so you can copy it
 type $env:USERPROFILE\.ssh\id_ed25519.pub
 
-# Leave this window open, or copy the output —
-# you'll paste it in the next step (e.g. adding it to GitHub or a server)
+ Leave this window open, or copy the output —
+ you'll paste it in the next step (e.g. adding it to GitHub or a server)
 ---
 
 # ✅ STEP 7 — Log in Using Your Password and Install Your Public Key
 
 From Windows PowerShell, connect to your Debian server using your newly created user:
 
-# 1. Connect to your Debian server using your newly created user
+ 1. Connect to your Debian server using your newly created user
 ssh myuser@SERVER_IP
 
-# Example:
+ Example:
 ssh myuser@192.168.1.10
 
-# First time connecting, you'll see a message like:
-# "The authenticity of host 'SERVER_IP' can't be established."
-# Type "yes" and press Enter, then enter the password for myuser
+ First time connecting, you'll see a message like:
+ "The authenticity of host 'SERVER_IP' can't be established."
+ Type "yes" and press Enter, then enter the password for myuser
 
-# 2. Create the .ssh directory
+ 2. Create the .ssh directory
 mkdir -p ~/.ssh
 
-# 3. Create (or edit) the authorized_keys file
+ 3. Create (or edit) the authorized_keys file
 nano ~/.ssh/authorized_keys
 
-# 4. Paste your public key
-# Go back to Windows PowerShell and copy the output of:
+ 4. Paste your public key
+ Go back to Windows PowerShell and copy the output of:
 type $env:USERPROFILE\.ssh\id_ed25519.pub
-# Paste the entire key into authorized_keys, then save and exit:
-# Ctrl + O, Enter, Ctrl + X
+ Paste the entire key into authorized_keys, then save and exit:
+ Ctrl + O, Enter, Ctrl + X
 
-# 5. Set the correct permissions
+ 5. Set the correct permissions
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 ---
