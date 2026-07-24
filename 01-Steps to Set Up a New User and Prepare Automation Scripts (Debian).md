@@ -86,73 +86,56 @@ ufw status
 
 ---
 
-# ✅ STEP 6 — Generate an SSH Key (On Your Local Windows PC)
+# ✅ STEP 6 — Generate an SSH Key (On Your Local/Client Windows PC)
 
-On your Windows computer, open PowerShell:
 
+# 1. Generate a new SSH key pair (ed25519 is modern and secure)
 ssh-keygen
 
-Press Enter to accept the default values:
+# Press Enter to accept the defaults:
+# - File location
+# - Passphrase (optional)
 
-File location
-Passphrase (optional)
+# This creates two files:
+# C:\Users\YourName\.ssh\id_ed25519       <- private key, never share this
+# C:\Users\YourName\.ssh\id_ed25519.pub   <- public key, safe to share
 
-This creates:
-
-C:\Users\YourName\.ssh\id_ed25519
-C:\Users\YourName\.ssh\id_ed25519.pub
-
-To display your public key, run:
-
+# 2. Display your public key so you can copy it
 type $env:USERPROFILE\.ssh\id_ed25519.pub
 
-Leave this window open or copy the output—you'll use it in the next step.
-
+# Leave this window open, or copy the output —
+# you'll paste it in the next step (e.g. adding it to GitHub or a server)
 ---
 
 # ✅ STEP 7 — Log in Using Your Password and Install Your Public Key
 
 From Windows PowerShell, connect to your Debian server using your newly created user:
 
+# 1. Connect to your Debian server using your newly created user
 ssh myuser@SERVER_IP
 
-Example:
-
+# Example:
 ssh myuser@192.168.1.10
 
-The first time you connect, you'll see a message similar to:
+# First time connecting, you'll see a message like:
+# "The authenticity of host 'SERVER_IP' can't be established."
+# Type "yes" and press Enter, then enter the password for myuser
 
-The authenticity of host 'SERVER_IP' can't be established.
-
-Type:
-
-yes
-
-When prompted, enter the password you created for myuser.
-
-After logging in successfully:
-
-1. Create the .ssh directory
+# 2. Create the .ssh directory
 mkdir -p ~/.ssh
-2. Create (or edit) the authorized_keys file
+
+# 3. Create (or edit) the authorized_keys file
 nano ~/.ssh/authorized_keys
-3. Paste your public key
 
-Return to your Windows PowerShell, copy the output of:
-
+# 4. Paste your public key
+# Go back to Windows PowerShell and copy the output of:
 type $env:USERPROFILE\.ssh\id_ed25519.pub
+# Paste the entire key into authorized_keys, then save and exit:
+# Ctrl + O, Enter, Ctrl + X
 
-Paste the entire key into authorized_keys.
-
-Save and exit:
-
-Ctrl + O, Enter
-Ctrl + X
-
-4. Set the correct permissions
+# 5. Set the correct permissions
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
-
 ---
 
 # ✅ STEP 8 — Test SSH Login from Windows
