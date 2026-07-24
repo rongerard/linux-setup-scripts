@@ -81,7 +81,7 @@ ufw --force enable
 
 # 5. Verification
 
-echo "🛡️ Firewall is ACTIVE and SSH is ALLOWED."
+
 ufw status
 
 ---
