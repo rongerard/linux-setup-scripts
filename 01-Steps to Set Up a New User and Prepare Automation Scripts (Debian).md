@@ -200,6 +200,10 @@ sudo apt update -y
 
 Save and exit.
 
+Also you can use this template to transfer the file from Windows to Linux
+
+scp "C:\path\to\file.txt" username@192.168.1.21:/home/username/
+
 ---
 
 # ✅ STEP 11 — Make Script Executable
