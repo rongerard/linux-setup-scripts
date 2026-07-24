@@ -16,7 +16,9 @@ DB_NAME="my_database"
 DB_USER="my_user"
 DB_PASS="my_password"        # Change this!
 MARIADB_ROOT_PASS="rootpassword"  # Change this!
-PHP_VERSION="8.4"
+PHP_VERSION="8.4" # Change this to match your Debian version:
+                   # Debian 12 → PHP 8.2
+                   # Debian 13 → PHP 8.4
 # ---------------------------------------------------------------
 
 # Colors for output
