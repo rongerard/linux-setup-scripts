@@ -66,8 +66,12 @@ systemctl enable --now ssh
 # We allow SSH first so we don't lock ourselves out!
 
 ufw default deny incoming
+
 ufw default allow outgoing
+
 ufw allow openssh
+
+Also allow the services that will be used. For example, if you're hosting a web server, allow HTTP (port 80) and HTTPS (port 443) through the firewall before enabling it.
 
 # 4. Enable the firewall
 
