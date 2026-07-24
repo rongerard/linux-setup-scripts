@@ -148,6 +148,7 @@ Save and exit:
 
 Ctrl + O, Enter
 Ctrl + X
+
 4. Set the correct permissions
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
