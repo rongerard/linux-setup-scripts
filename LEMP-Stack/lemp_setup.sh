@@ -3,6 +3,7 @@
 # =============================================================
 # LEMP Stack Auto-Deployment Script for Debian (MariaDB)
 # Usage: sudo bash lemp_setup.sh
+# Safe to re-run: all steps are idempotent.
 # =============================================================
 
 set -e  # Exit on any error
@@ -14,11 +15,9 @@ APP_NAME="myapp"
 APP_DIR="/var/www/$APP_NAME"
 DB_NAME="my_database"
 DB_USER="my_user"
-DB_PASS="my_password"        # Change this!
-MARIADB_ROOT_PASS="rootpassword"  # Change this!
-PHP_VERSION="8.4" # Change this to match your Debian version:
-                   # Debian 12 → PHP 8.2
-                   # Debian 13 → PHP 8.4
+DB_PASS="my_password"             
+MARIADB_ROOT_PASS="your_password"  # Change this!
+# PHP_VERSION is auto-detected after install (see STEP 6) — no need to set manually.
 # ---------------------------------------------------------------
 
 # Colors for output
@@ -70,9 +69,13 @@ log "MariaDB installed and running."
 
 # ---------------------------------------------------------------
 # STEP 5 — Secure MariaDB (replaces mysql_secure_installation)
+# Idempotent: detects whether root already has a password set.
 # ---------------------------------------------------------------
 log "Securing MariaDB..."
-mariadb -u root <<EOF
+
+if mariadb -u root -e "SELECT 1;" &>/dev/null; then
+    # Root has no password yet — fresh install, safe to run full setup
+    mariadb -u root <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASS}';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
@@ -80,13 +83,26 @@ DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 EOF
-log "MariaDB secured."
+    log "MariaDB secured (fresh install)."
+elif mariadb -u root -p"${MARIADB_ROOT_PASS}" -e "SELECT 1;" &>/dev/null; then
+    warn "Root password already set to configured value — skipping re-secure."
+else
+    error "Cannot authenticate as root (empty password failed, and MARIADB_ROOT_PASS also failed). Check the password or reset it manually."
+fi
 
 # ---------------------------------------------------------------
-# STEP 6 — Install PHP and PHP-FPM
+# STEP 6 — Install PHP and PHP-FPM (auto-detect installed version)
 # ---------------------------------------------------------------
-log "Installing PHP ${PHP_VERSION} and extensions..."
+log "Installing PHP and extensions..."
 apt install php-fpm php-mysql php-curl php-xml php-mbstring php-zip php-gd -y
+
+# Detect whichever PHP version apt actually installed — don't hardcode it.
+PHP_VERSION=$(php -v | head -1 | grep -oP '^PHP \K[0-9]+\.[0-9]+')
+if [ -z "$PHP_VERSION" ]; then
+    error "Could not detect installed PHP version."
+fi
+log "Detected installed PHP version: ${PHP_VERSION}"
+
 systemctl start php${PHP_VERSION}-fpm
 systemctl enable php${PHP_VERSION}-fpm
 log "PHP ${PHP_VERSION} installed and running."
@@ -130,7 +146,7 @@ ufw status
 log "UFW configured."
 
 # ---------------------------------------------------------------
-# STEP 9 — Create app folder structure
+# STEP 8 — Create app folder structure
 # ---------------------------------------------------------------
 log "Creating app directory structure at $APP_DIR..."
 mkdir -p $APP_DIR/{public/assets/{css,js,images},src,config,storage/{logs,cache,uploads},vendor}
