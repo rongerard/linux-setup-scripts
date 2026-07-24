@@ -115,11 +115,13 @@ Now:
 
 1. On Windows PowerShell:
 
-type $env:USERPROFILE\.ssh\id_ed25519.pub
+type this on windows powershell exactly as it is
 
-2. Copy the long output
-3. Paste it inside Debian `authorized_keys`
-4. Save and exit
+type $env:USERPROFILE\.ssh\id_ed25519.pub
+2. Login to through ssh myuser@(host address)
+3. Copy the long output
+4. Paste it inside Debian `authorized_keys`
+5. Save and exit
 
 Fix permissions:
 
