@@ -216,6 +216,11 @@ if it need admin
 ./install.sh
 
 ---
+# ✅ STEP 12 — Remember to place your PHP app files in: /var/www/$APP_NAME
+
+Download the myapp folder on the same repository.
+Then put it in the /var/www/$APP_NAME
+---
 
 # 🔐 EXTRA SECURITY (Highly Recommended)
 
