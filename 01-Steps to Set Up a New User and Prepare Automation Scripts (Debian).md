@@ -89,7 +89,8 @@ ufw status
 # ✅ STEP 6 — Generate an SSH Key (On Your Local/Client Windows PC)
 
 
- 1. Generate a new SSH key pair (ed25519 is modern and secure)
+ 1. On your Windows computer, open PowerShell and run the command:
+    
 ssh-keygen
 
  Press Enter to accept the defaults:
@@ -101,6 +102,9 @@ ssh-keygen
  C:\Users\YourName\.ssh\id_ed25519.pub   <- public key, safe to share
 
  2. Display your public key so you can copy it
+
+run the command:
+
 type $env:USERPROFILE\.ssh\id_ed25519.pub
 
  Leave this window open, or copy the output —
